@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Utils\UserAccount;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,18 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        $user = new UserAccount("amine", "ziani","email@email.com", "23/07/1995");
-        $resultat = $user->isValid();
-        echo $resultat;
+        $user = new UserAccount("amine", "ziani","test@email.fr","mypassword123", "23/07/1995");
+        $output = $user->isValid();
+        $entityManager = $this->getDoctrine()->getManager();
+        $user->save($entityManager);
+        $usersList = $this->getDoctrine()->getRepository(User::class)->findAll();
+        foreach ($usersList as $item){
+            echo $item->getEmail()."<br>";
+        }
+        if($output)
+            echo "the user is valid";
+        else
+            echo "the user isn't valid";
         return $this->render('main/index.html.twig');
     }
 }

@@ -37,14 +37,24 @@ class User implements UserInterface
      */
     private $password;
 
+
     /**
-     * @ORM\OneToMany(targetEntity=ToDoList::class, mappedBy="creator")
+     * @ORM\Column(type="date")
      */
-    private $lists;
+    private $birthday;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
 
     public function __construct()
     {
-        $this->lists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,32 +138,38 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|ToDoList[]
-     */
-    public function getLists(): Collection
+    public function getBirthday(): ?\DateTimeInterface
     {
-        return $this->lists;
+        return $this->birthday;
     }
 
-    public function addList(ToDoList $list): self
+    public function setBirthday(\DateTimeInterface $birthday): self
     {
-        if (!$this->lists->contains($list)) {
-            $this->lists[] = $list;
-            $list->setCreator($this);
-        }
+        $this->birthday = $birthday;
 
         return $this;
     }
 
-    public function removeList(ToDoList $list): self
+    public function getFirstName(): ?string
     {
-        if ($this->lists->removeElement($list)) {
-            // set the owning side to null (unless already changed)
-            if ($list->getCreator() === $this) {
-                $list->setCreator(null);
-            }
-        }
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }
