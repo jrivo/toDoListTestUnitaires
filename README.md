@@ -6,7 +6,7 @@ docker-compose build --no-cache
 docker-compose up -d
 ```
 
-##### Debug docker
+##### Command to run unit tests
 ```
-docker-compose logs -f [CONTAINER_NAME: php|nginx|db|node]
+sudo docker-compose exec php bin/phpunit
 ```
