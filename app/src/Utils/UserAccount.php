@@ -147,6 +147,22 @@ class UserAccount {
         $this->dateOfBirth = $dateOfBirth;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password): void
+    {
+        $this->password = $password;
+    }
+
 
 
 }
