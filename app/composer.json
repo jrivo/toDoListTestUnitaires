@@ -48,7 +48,7 @@
         "symfony/css-selector": "9999999-dev",
         "symfony/debug-bundle": "9999999-dev",
         "symfony/maker-bundle": "^1.0",
-        "symfony/phpunit-bridge": "9999999-dev",
+        "symfony/phpunit-bridge": "5.x-dev",
         "symfony/stopwatch": "9999999-dev",
         "symfony/var-dumper": "9999999-dev",
         "symfony/web-profiler-bundle": "9999999-dev"
