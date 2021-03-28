@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b980e120c2ad5017f51e477a7aadd77b",
+    "content-hash": "fd289866a0b98738df82babc0f32e14c",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -8063,12 +8063,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "f2985c4d17f5d2584c5bd66e13b2fd0e3a67416f"
+                "reference": "448f9f36df6a9468ff4206adc98acbc1b3d2d3d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/f2985c4d17f5d2584c5bd66e13b2fd0e3a67416f",
-                "reference": "f2985c4d17f5d2584c5bd66e13b2fd0e3a67416f",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/448f9f36df6a9468ff4206adc98acbc1b3d2d3d6",
+                "reference": "448f9f36df6a9468ff4206adc98acbc1b3d2d3d6",
                 "shasum": ""
             },
             "require": {
@@ -8139,7 +8139,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-05T07:57:52+00:00"
+            "time": "2021-03-23T20:42:45+00:00"
         },
         {
             "name": "symfony/web-profiler-bundle",
@@ -8223,7 +8223,21 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "composer/package-versions-deprecated": 20,
+        "doctrine/doctrine-bundle": 20,
+        "doctrine/doctrine-migrations-bundle": 20,
+        "doctrine/orm": 20,
+        "phpdocumentor/reflection-docblock": 20,
+        "symfony/twig-bundle": 20,
+        "symfony/browser-kit": 20,
+        "symfony/css-selector": 20,
+        "symfony/debug-bundle": 20,
+        "symfony/phpunit-bridge": 20,
+        "symfony/stopwatch": 20,
+        "symfony/var-dumper": 20,
+        "symfony/web-profiler-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
