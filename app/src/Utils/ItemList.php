@@ -44,7 +44,7 @@ class ItemList
         }
     }*/
 
-    public function save()
+    public function save($entityManager)
     {
         if ($this->isValid()) {
             $item = new Item();
@@ -52,9 +52,8 @@ class ItemList
             $item->setName($this->name);
             $item->setContent($this->content);
             $item->setCreationDate(\DateTime::createFromFormat('d/m/Y', $this->creationDate, $tz));
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($item);
-            $em->flush();
+            $entityManager->persist($item);
+            $entityManager->flush();
             return true;
         } else {
             return false;
