@@ -29,10 +29,10 @@ class ItemList
         }
     }
 
-    /*public function addItem($list, $listManager)
+    public function addItem($list, $entityManager)
     {
         if ($this->isValid()) {
-            $targetList = $listManager->getRepository(ToDoList::class)->findOneBy(['name' => $list]);
+            $targetList = $entityManager->getRepository(ToDoList::class)->findOneBy(['name' => $list]);
             $em = $this->getDoctrine()->getManager();
             $item = new Item();
             $item->setName($this->name);
@@ -42,7 +42,7 @@ class ItemList
             $em->persist($item);
             $em->flush();
         }
-    }*/
+    }
 
     public function save($entityManager)
     {

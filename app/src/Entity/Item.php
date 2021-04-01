@@ -28,7 +28,7 @@ class Item
     private $content;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $creationDate;
 
