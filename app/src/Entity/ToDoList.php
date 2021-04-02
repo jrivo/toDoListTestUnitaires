@@ -25,15 +25,10 @@ class ToDoList
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="lists")
-     */
-    private $creator;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="list")
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="item")
      */
     private $items;
-
+    
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -56,18 +51,6 @@ class ToDoList
         return $this;
     }
 
-    public function getCreator(): ?User
-    {
-        return $this->creator;
-    }
-
-    public function setCreator(?User $creator): self
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Item[]
      */
@@ -80,7 +63,7 @@ class ToDoList
     {
         if (!$this->items->contains($item)) {
             $this->items[] = $item;
-            $item->setList($this);
+            $item->setItem($this);
         }
 
         return $this;
@@ -90,11 +73,13 @@ class ToDoList
     {
         if ($this->items->removeElement($item)) {
             // set the owning side to null (unless already changed)
-            if ($item->getList() === $this) {
-                $item->setList(null);
+            if ($item->getItem() === $this) {
+                $item->setItem(null);
             }
         }
 
         return $this;
     }
+
+
 }

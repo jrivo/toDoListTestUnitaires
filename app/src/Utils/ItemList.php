@@ -5,26 +5,26 @@ namespace App\Utils;
 
 use App\Entity\Item;
 
+
 class ItemList
 {
     private $name;
     private $content;
     private $creationDate;
 
-    public function __construct($name, $content, $creationDate)
+    public function __construct($name, $content)
     {
         $this->name = $name;
         $this->content = $content;
-        $this->creationDate = $creationDate;
+        $dt = new \DateTime();
+        $this->creationDate = $dt->format('d/m/Y H:i:s'); // the creation date is generated automatically when the item is created
     }
 
     public function isValid()
     {
         if (!empty($this->name) && strlen($this->content) < 1000) {
-            echo "item valid";
             return true;
         } else {
-            echo "item invalid";
             return false;
         }
     }
@@ -48,10 +48,11 @@ class ItemList
     {
         if ($this->isValid()) {
             $item = new Item();
-            $tz  = new \DateTimeZone('Europe/Paris');
+            if($entityManager->getRepository(Item::class)->findOneBy(['name' => $this->name]))
+                return false;
             $item->setName($this->name);
             $item->setContent($this->content);
-            $item->setCreationDate(\DateTime::createFromFormat('d/m/Y', $this->creationDate, $tz));
+            $item->setCreationDate(\DateTime::createFromFormat('d/m/Y H:i:s',$this->creationDate));
             $entityManager->persist($item);
             $entityManager->flush();
             return true;
@@ -59,6 +60,10 @@ class ItemList
             return false;
         }
     }
+
+    public function getItem($entityManager){
+        return $entityManager->getRepository(Item::class)->findOneBy(['name' => $this->name]);
+}
 
     /**
      * @return mixed

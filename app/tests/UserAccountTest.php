@@ -75,17 +75,17 @@ class UserAccountTest extends TestCase{
         $this->assertFalse($this->user->isValid());
     }
 
-    public function passwordEmpty(){
+    public function testpasswordEmpty(){
         $this->user->setPassword("");
         $this->assertFalse($this->user->isValid());
     }
 
-    public function passwordTooShort(){
+    public function testpasswordTooShort(){
         $this->user->setPassword("123");
         $this->assertFalse($this->user->isValid());
     }
 
-    public function passwordTooLong(){
+    public function testpasswordTooLong(){
         $this->user->setPassword("1231111111111111111111111111111111111111111");
         $this->assertFalse($this->user->isValid());
     }

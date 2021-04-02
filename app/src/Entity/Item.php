@@ -34,8 +34,9 @@ class Item
 
     /**
      * @ORM\ManyToOne(targetEntity=ToDoList::class, inversedBy="items")
+     * @ORM\OrderBy({"creation_date" = "DESC"})
      */
-    private $list;
+    private $item;
 
     public function getId(): ?int
     {
@@ -78,15 +79,16 @@ class Item
         return $this;
     }
 
-    public function getList(): ?ToDoList
+    public function getItem(): ?ToDoList
     {
-        return $this->list;
+        return $this->item;
     }
 
-    public function setList(?ToDoList $list): self
+    public function setItem(?ToDoList $item): self
     {
-        $this->list = $list;
+        $this->item = $item;
 
         return $this;
     }
+
 }
