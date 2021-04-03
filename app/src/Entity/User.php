@@ -53,8 +53,14 @@ class User implements UserInterface
      */
     private $lastName;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ToDoList::class, mappedBy="creator")
+     */
+    private $lists;
+
     public function __construct()
     {
+        $this->lists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,6 +176,36 @@ class User implements UserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ToDoList[]
+     */
+    public function getLists(): Collection
+    {
+        return $this->lists;
+    }
+
+    public function addList(ToDoList $list): self
+    {
+        if (!$this->lists->contains($list)) {
+            $this->lists[] = $list;
+            $list->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeList(ToDoList $list): self
+    {
+        if ($this->lists->removeElement($list)) {
+            // set the owning side to null (unless already changed)
+            if ($list->getCreator() === $this) {
+                $list->setCreator(null);
+            }
+        }
 
         return $this;
     }

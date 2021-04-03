@@ -28,6 +28,11 @@ class ToDoList
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="item")
      */
     private $items;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="lists")
+     */
+    private $creator;
     
     public function __construct()
     {
@@ -77,6 +82,18 @@ class ToDoList
                 $item->setItem(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

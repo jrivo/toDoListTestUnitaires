@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-
 class MainController extends AbstractController
 {
     /**
@@ -24,10 +23,9 @@ class MainController extends AbstractController
         $item1 = new ItemList("item1", "this is the content16");
         $item2 = new ItemList("item2", "this is the content16");
         $item3 = new ItemList("item3", "this is the content16");
-        $todoList = new CustomTodoList("todo list",$entityManager);
-//        $user = new UserAccount("amine", "ziani","test@email.fr","mypassword123", "23/07/1995");
-//        $user->save($entityManager);
-//        $item->save($entityManager);
+        $user = new UserAccount("jonathan", "rivo", "test2@email.fr", "mypassword123", "04/12/1998");
+        $user->save($entityManager);
+        $todoList = new CustomTodoList("todo list", "2", $entityManager);
         $item1->save($entityManager);
         $item2->save($entityManager);
         $item3->save($entityManager);
@@ -44,12 +42,14 @@ class MainController extends AbstractController
 //            echo "the user is valid";
 //        else
 //            echo "the user isn't valid";
-        echo "<br>".$todoList->getName()."<br>";
+
+        echo "<br>" . $todoList->getName() . "<br>";
         echo "<br>--------------<br>";
         $allItems = $todoList->getItems($entityManager);
-        for($i = 0 ; $i < count($allItems); $i++){
-            echo "<br>".$allItems[$i]->getName()."<br>";
-    }
+        for ($i = 0; $i < count($allItems); $i++) {
+            echo "<br>" . $allItems[$i]->getName() . "<br>";
+        }
+
         return $this->render('main/index.html.twig');
     }
 }
