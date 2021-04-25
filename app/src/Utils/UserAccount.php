@@ -38,6 +38,12 @@ class UserAccount {
         $lastNameIsValid = !empty($this->lastName)
             && $lastNameIsValid = preg_match("/^[\s,.'-]*\p{L}[\p{L}\s,.'-]*$/u", $this->lastName);
 
+        // the name can't have more than a 100 characters
+        if( strlen($this->firstName) > 100)
+            $firstNameIsValid = false;
+
+        if( strlen($this->lastName) > 100)
+            $lastNameIsValid = false;
 
         // age validation
         if($dateOfBirth){
