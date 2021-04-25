@@ -60,6 +60,25 @@ class CustomTodoListTest extends TestCase
         $this->assertFalse($this->todoList->addItem($item2));
     }
 
+
+    // two items can't have the same name
+    public function testTwoItemsSameName()
+    {
+        $item1 = new ItemList("same name", "some text");
+        $item2 = new ItemList("same name", "some text");
+        $this->todoList->addItem($item1);
+        $this->assertFalse($this->todoList->addItem($item2));
+
+    }
+
+    // lists can't have more than 10 items
+    public function testFullList() {
+        for($i = 0; $i < 10; $i++){
+            $this->todoList>addItem(new ItemList("item".(string)$i, "some text"));
+        }
+        $this->assertFalse($this->todoList>addItem(new ItemList("item11", "on item too many")));
+    }
+
     public function testAddEighthItem()
     {
         $entityManager = $this->getDoctrine()->getManager();
