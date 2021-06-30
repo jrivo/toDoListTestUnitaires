@@ -3,17 +3,72 @@
 namespace App\Controller;
 
 use App\Entity\Item;
+use App\Entity\ToDoList;
 use App\Entity\User;
 use App\Utils\CustomTodoList;
 use App\Utils\ItemList;
 use App\Utils\UserAccount;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class MainController extends AbstractController
 {
+
+
+    /**
+     * @Route("/api/todo-lists", name="todo_lists")
+     */
+    public function todolists(SerializerInterface $serializer): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $todoLists = $em->getRepository(ToDoList::class)->findAll();
+        $arrayOutput = array();
+        foreach ($todoLists as $key => $todoList){
+            $arrayOutput["todo_lists"][$key]["id"] = $todoList->getId();
+            $arrayOutput["todo_lists"][$key]["name"] = $todoList->getName();
+            $items = $todoList->getItems();
+            if(!is_null($items)){
+                foreach ($items as $itemKey => $item){
+                    $arrayOutput["todo_lists"][$key]["items"][$itemKey]["name"] = $item->getName();
+                    $arrayOutput["todo_lists"][$key]["items"][$itemKey]["content"] = $item->getContent();
+                    $arrayOutput["todo_lists"][$key]["items"][$itemKey]["creationDate"] = $item->getCreationDate();
+                }
+            }
+        }
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $sales = array("toto" => "test", "number"=> "2","myarray", array("banana", "potato") );
+        $sales =json_encode($arrayOutput);
+        $jsonContent = $serializer->serialize($sales, 'json');
+        return new JsonResponse($sales, Response::HTTP_OK, [], true);
+    }
+
+
+
+    /**
+     * @Route("/api/delete-todo-list", name="delete_todo_list", methods={"POST"})
+     */
+    public function delete_todo_list(Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $todoItem = $em->getReference(ToDoList::class, $request->get("id"));
+        $em->remove($todoItem);
+        $em->flush();
+        $result = array("result"=> "todo list removed");
+        return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+    }
+
+
     /**
      * @Route("/main", name="main")
      */
