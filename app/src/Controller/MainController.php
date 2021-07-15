@@ -32,12 +32,12 @@ class MainController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $todoLists = $em->getRepository(ToDoList::class)->findAll();
         $arrayOutput = array();
-        foreach ($todoLists as $key => $todoList){
+        foreach ($todoLists as $key => $todoList) {
             $arrayOutput["todo_lists"][$key]["id"] = $todoList->getId();
             $arrayOutput["todo_lists"][$key]["name"] = $todoList->getName();
             $items = $todoList->getItems();
-            if(!is_null($items)){
-                foreach ($items as $itemKey => $item){
+            if (!is_null($items)) {
+                foreach ($items as $itemKey => $item) {
                     $arrayOutput["todo_lists"][$key]["items"][$itemKey]["name"] = $item->getName();
                     $arrayOutput["todo_lists"][$key]["items"][$itemKey]["content"] = $item->getContent();
                     $arrayOutput["todo_lists"][$key]["items"][$itemKey]["creationDate"] = $item->getCreationDate();
@@ -47,12 +47,11 @@ class MainController extends AbstractController
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
-        $sales = array("toto" => "test", "number"=> "2","myarray", array("banana", "potato") );
-        $sales =json_encode($arrayOutput);
+        $sales = array("toto" => "test", "number" => "2", "myarray", array("banana", "potato"));
+        $sales = json_encode($arrayOutput);
         $jsonContent = $serializer->serialize($sales, 'json');
         return new JsonResponse($sales, Response::HTTP_OK, [], true);
     }
-
 
 
     /**
@@ -61,10 +60,36 @@ class MainController extends AbstractController
     public function delete_todo_list(Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $todoItem = $em->getReference(ToDoList::class, $request->get("id"));
-        $em->remove($todoItem);
-        $em->flush();
-        $result = array("result"=> "todo list removed");
+        $exists = $em->find(ToDoList::class, $request->get("id"));
+        if ($exists) {
+            $todoItem = $em->getReference(ToDoList::class, $request->get("id"));
+            $em->remove($todoItem);
+            $em->flush();
+        }
+        if ($exists)
+            $result = array("result" => "todo list removed");
+        else
+            $result = array("result" => "item doesn't exist");
+
+        return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+    }
+
+
+    /**
+     * @Route("/api/add-todo-list", name="add_todo_list", methods={"POST"})
+     */
+    public function add_todo_list(Request $request): Response
+    {
+//        $em = $this->getDoctrine()->getManager();
+//        $todoItem = $em->getReference(ToDoList::class, $request->get("id"));
+//        $em->remove($todoItem);
+//        $em->flush();
+//        $result = array("result"=> "todo list removed");
+        $entityManager = $this->getDoctrine()->getManager();
+//        $item1 = new ItemList($request->get("name"), $request->get("content"));
+//        $todoItems = $request->get("items");
+        $todoList = new CustomTodoList($request->get("name"), "2", $entityManager);
+        $result = array("result" => "todo list created");
         return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
     }
 
