@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Utils\CustomTodoList;
 use App\Utils\ItemList;
 use App\Utils\UserAccount;
+use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,6 +91,111 @@ class MainController extends AbstractController
 //        $todoItems = $request->get("items");
         $todoList = new CustomTodoList($request->get("name"), "2", $entityManager);
         $result = array("result" => "todo list created");
+        return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+    }
+
+
+    /**
+     * @Route("/api/add-todo-item", name="add_todo_item", methods={"POST"})
+     */
+    public function add_todo_item(Request $request): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        if (!$request->get("todolist_id")) {
+            $result = array("result" => "todo list id not specified");
+            return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+
+        }
+
+        if (!$request->get("item_name")) {
+            $result = array("result" => "todo list item name not specified");
+            return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+
+        }
+        if ($request->get("item_content") && strlen($request->get("item_content")) > 1000) {
+            $result = array("result" => "Max characters for the content is 1000");
+            return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+        }
+
+        if (!$request->get("todolist_id")) {
+            $result = array("result" => "todo list id not specified");
+            return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
+
+        }
+        $todoList = $entityManager->find(ToDoList::class, $request->get("todolist_id"));
+        $result = array("result" => "");
+        if ($todoList) {
+            // if the todo list exists, a new item is added to it
+            $valid = True;
+            $dt = new \DateTime();
+            $creationDate = $dt->format('d/m/Y H:i:s');
+            $items = $todoList->getItems();
+            for ($i = 0; $i < count($items); $i++) { // checking if the item already exists
+                if ($items[$i]->getName() == $request->get("item_name")) {
+                    $result = array("result" => "item name already exists");
+                    return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true); // stopping the program with an error message
+                }
+
+            }
+            $item = new Item();
+            $item->setName($request->get("item_name"));
+            $item->setContent($request->get("item_content"));
+
+            if ($items[0]) {
+                $LastDate = $items[count($items) - 1]->getCreationDate();
+                if ($request->get("creation_date"))
+                    if (\DateTime::createFromFormat('d/m/Y H:i:s', $request->get("creation_date")))
+                        $NewDate = \DateTime::createFromFormat('d/m/Y H:i:s', $request->get("creation_date"));
+                    else {
+                        $result = array("result" => "Date format is not valid");
+                        return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true); // stopping the program with an error message
+
+                    }
+                else
+                    $NewDate = \DateTime::createFromFormat('d/m/Y H:i:s', $creationDate);
+
+                var_dump($LastDate);
+                var_dump($NewDate);
+
+                $interval = $LastDate->diff($NewDate);
+                $timeDiffMin = ($interval->h * 60) + $interval->i;
+                var_dump($timeDiffMin);
+            } else {
+                $timeDiffMin = 1000;
+            }
+
+            if ($timeDiffMin >= 30) {
+                if ($request->get("creation_date")) {
+                    if (\DateTime::createFromFormat('d/m/Y H:i:s', $request->get("creation_date"))) {
+                        $item->setCreationDate(\DateTime::createFromFormat('d/m/Y H:i:s', $request->get("creation_date")));
+                    } else {
+                        $result = array("result" => "Date format is not valid");
+                        $valid = false;
+                    }
+                } else {
+                    $item->setCreationDate(\DateTime::createFromFormat('d/m/Y H:i:s', $creationDate));
+                }
+                if ($valid) {
+                    $entityManager->persist($item);
+                    $entityManager->flush();
+                    $todoList->addItem($item);
+                    $entityManager->persist($todoList);
+                    $entityManager->flush();
+                    if (count($items) == 8) {
+                        $result = array("result" => "item successfully added", "email" => "sent");
+
+                    } else {
+                        $result = array("result" => "item successfully added");
+
+                    }
+                }
+            } else {
+                $result = array("result" => "You have to wait 30 minutes every time you create an item");
+            }
+
+        } else {
+            $result = array("result" => "todo list not found");
+        }
         return new JsonResponse(json_encode($result), Response::HTTP_OK, [], true);
     }
 
