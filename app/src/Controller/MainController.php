@@ -154,12 +154,8 @@ class MainController extends AbstractController
                 else
                     $NewDate = \DateTime::createFromFormat('d/m/Y H:i:s', $creationDate);
 
-                var_dump($LastDate);
-                var_dump($NewDate);
-
                 $interval = $LastDate->diff($NewDate);
                 $timeDiffMin = ($interval->h * 60) + $interval->i;
-                var_dump($timeDiffMin);
             } else {
                 $timeDiffMin = 1000;
             }

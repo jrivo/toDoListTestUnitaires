@@ -26,7 +26,7 @@ class ApiTest extends TestCase
     public function testDeleteToDoList()
     {
         $data = array(
-            "id"=>"25",
+            "id"=>"13",
         );
         $response = $this->client->post("/api/delete-todo-list", array(
             'form_params' => $data));
