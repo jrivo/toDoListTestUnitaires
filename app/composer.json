@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "9999999-dev",
         "doctrine/doctrine-migrations-bundle": "9999999-dev",
         "doctrine/orm": "9999999-dev",
+        "guzzlehttp/guzzle": "7.4.x-dev",
         "phpdocumentor/reflection-docblock": "5.x-dev",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "*",

@@ -108,6 +108,13 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/guzzlehttp/promises" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
