@@ -38,7 +38,7 @@ These are the use cases and the expected outputs
 ```
 {"result":"Max characters for the content is 1000"}
 ```
-##### when the user tried to add a second less than 30 min
+##### when the user tries to add a second less than 30 min
 ```
 {"result":"You have to wait 30 minutes every time you create an item"}
 ```
