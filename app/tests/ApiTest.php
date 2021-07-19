@@ -25,8 +25,10 @@ class ApiTest extends TestCase
 
     public function testDeleteToDoList()
     {
+        $lists = json_decode($this->client->request("GET","/api/todo-lists")->getBody(),true)["todo_lists"];
+        $listToDelete = $lists[count($lists)-1];
         $data = array(
-            "id"=>"13",
+            "id"=>$listToDelete["id"],
         );
         $response = $this->client->post("/api/delete-todo-list", array(
             'form_params' => $data));
@@ -64,9 +66,11 @@ class ApiTest extends TestCase
 
     public function testAddItemTodoList()
     {
+        $lists = json_decode($this->client->request("GET","/api/todo-lists")->getBody(),true)["todo_lists"];
+        $targetList = $lists[rand(0,count($lists)-1)];
         $data = array(
-            "todolist_id"=>"1",
-            "item_name"=>"newItem",
+            "todolist_id"=>$targetList["id"],
+            "item_name"=>"newItem".rand(0,10000),
             "item_content"=>"newItemContent",
             "creation_date"=>(new \DateTime)->format('d/m/Y H:i:s'),
         );
@@ -111,14 +115,24 @@ class ApiTest extends TestCase
 
     public function testAddExistingItemTodoList()
     {
-        $data = array(
+        $randSuffix = rand(0,100);
+        $item1 = array(
             "todolist_id"=>"1",
-            "item_name"=>"newItem",
+            "item_name"=>"newItem".$randSuffix,
+            "item_content"=>"newItemContent",
+            "creation_date"=>"20/06/2021 20:50:00",
+        );
+        $item2 = array(
+            "todolist_id"=>"1",
+            "item_name"=>"newItem".$randSuffix,
             "item_content"=>"newItemContent",
             "creation_date"=>(new \DateTime)->format('d/m/Y H:i:s'),
         );
+        $this->client->post("/api/add-todo-item", array(
+            'form_params' => $item1));
+        sleep(1);
         $response = $this->client->post("/api/add-todo-item", array(
-            'form_params' => $data));
+            'form_params' => $item2));
         $this->assertEquals(200,$response->getStatusCode());
         $body = $response->getBody();
         $expected = json_encode(array("result" => "item name already exists"));
@@ -141,19 +155,27 @@ class ApiTest extends TestCase
         $this->assertEquals($expected,$body);
     }
 
-    /*public function testAddItemTodoListTooEarly()
+    public function testAddItemTodoListTooEarly()
     {
-        $data = array(
+        $item1 = array(
             "todolist_id"=>"1",
             "item_name"=>"newItem",
             "item_content"=>"newItemContent",
             "creation_date"=>(new \DateTime)->format('d/m/Y H:i:s'),
         );
+        $item2 = array(
+            "todolist_id"=>"1",
+            "item_name"=>"newItem2",
+            "item_content"=>"newItemContent",
+            "creation_date"=>(new \DateTime)->format('d/m/Y H:i:s'),
+        );
+        $this->client->post("/api/add-todo-item", array(
+            'form_params' => $item1));
         $response = $this->client->post("/api/add-todo-item", array(
-            'form_params' => $data));
+            'form_params' => $item2));
         $this->assertEquals(200,$response->getStatusCode());
         $body = $response->getBody();
         $expected = json_encode(array("result" => "You have to wait 30 minutes every time you create an item"));
         $this->assertEquals($expected,$body);
-    }*/
+    }
 }
